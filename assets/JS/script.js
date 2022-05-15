@@ -1,3 +1,15 @@
+// Variables for high score
+
+var highScores = JSON.parse(localStorage.getItem("highScores"))||[];
+function saveScore(e){
+    
+    var initials = document.getElementById("initials")
+
+    var score = {"score": quiz.score,"initials": initials.value}
+    highScores.push(score);
+    localStorage.setItem("highScores", JSON.stringify(highScores))
+}
+
 // Create a quiz class
 class Quiz{
     constructor(questions){
@@ -11,6 +23,8 @@ getQuestionIndex(){
 guess(answer) {
     if (this.getQuestionIndex().isCorrectAnswer(answer)){
         this.score++;
+    } else {
+        quizTime -= 10;
     }
     this.questionIndex++;
 }
@@ -43,7 +57,7 @@ function displayQuestion(){
         //show options
         let choices = quiz.getQuestionIndex().choices;
         for(let i = 0; i < choices.length; i++){
-            let choiceElement =document.getElementById("choice"+
+            let choiceElement = document.getElementById("choice" +
             i);
             choiceElement.innerHTML = choices[i];
             guess("btn" + i, choices[i]);
@@ -54,7 +68,7 @@ function displayQuestion(){
 }
 
 //guess function
-function guess(id,guess) {
+function guess(id, guess) {
     let button = document.getElementById(id);
     button.onclick = function(){
         quiz.guess(guess);
@@ -64,7 +78,7 @@ function guess(id,guess) {
 
 //Show quiz progress
 function showProgress(){
-    let currentQuestionNumber = quiz.questionIndex + 1
+    let currentQuestionNumber = quiz.questionIndex + 1;
     let progressElement = document.getElementById("progress");
     progressElement.innerHTML =
     `Question ${currentQuestionNumber} of ${quiz.questions.length}`;
@@ -80,6 +94,7 @@ function showScores(){
     <div class -"quiz-repeat">
     <a href="index.html"> Take Quiz Again </a>
     </div>
+    <span>Enter Initials</span><input type = "text" id = "initials"> <button type = "button" onclick= "saveScore()"> Save </button>
     `;
     let quizElement = document.getElementById("quiz");
     quizElement.innerHTML = quizEndHTML;
@@ -94,21 +109,29 @@ let questions = [
     new Question(
         "In JavaScript, what is a block of code called that is used to perform a specific task?", ["String","Variable","Decleration","Function"], "Function"
     ),
-    new Question("In JavaScript, what element is used to store and manipulate text usually in multiples?" [" Arrays", "Function", "Variables","String"], "String"
+    new Question(
+        "In JavaScript, what element is used to store and manipulate text usually in multiples?", [" Arrays", "Function", "Variables","String"], "String"
 
     ),
-    new Question("What is the most important CSS property, used for controlling the layout?" ["Display","Table","Margin", "Padding"],"Display"
+    new Question(
+        "What is the most important CSS property, used for controlling the layout?", ["Display","Table","Margin", "Padding"],"Display"
     )
 ];
 
 let quiz = new Quiz(questions);
 
+//Start Button
+document.getElementById("start-button").addEventListener("click",function(){
+    displayQuestion();
+    startCountdown();
+})
+
 //Display question
-displayQuestion();
+
 
 //Add a countdown
 
-let time =1;
+let time =5;
 let quizTimeInMinutes = time * 60 * 60;
 quizTime = quizTimeInMinutes / 60;
 
@@ -131,4 +154,5 @@ if (quizTime <= 0){
 }
     }, 1000)
 }
-startCountdown();
+
+

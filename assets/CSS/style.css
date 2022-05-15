@@ -103,3 +103,12 @@
     .quiz-repeat a:hover{
         background-color: blue;
     }
+      #start-button{
+        text-align: center;
+        justify-content: center;
+        display: flex;
+        color: aqua;
+        padding: 50px;
+        margin: 50px;
+        right: 50px;
+    }
